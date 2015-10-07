@@ -1,14 +1,13 @@
 <?php
 /**
  * Plugin Name: Add Page From Template
- * Plugin URI: (プラグインの説明と更新を示すページの URI)
- * Description: (プラグインの短い説明)
- * Version: (プラグインのバージョン番号。例: 1.0)
- * Author: (プラグイン作者の名前)
- * Author URI: (プラグイン作者の URI)
- * License: (ライセンス名の「スラッグ」 例: GPL2)
- *
- * Plugin Name: Add Page From Template
+ * Plugin URI: https://github.com/yousan/add-page-from-template
+ * Description: PHPのテンプレートファイルから固定ページを生成します。
+ * Description(en): Add pages from template files.
+ * Version: 0.0.0.1
+ * Author: Yousan_O
+ * Author URI: http://www.l2tp.org
+ * License: GPL2
  */
 
 
