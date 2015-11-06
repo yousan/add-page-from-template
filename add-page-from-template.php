@@ -13,6 +13,20 @@
 
 define('APFT_I18N_DOMAIN', 'add-post-from-template');
 
+function apft_autoloader($classname) {
+    if (0 !== (strpos($classname, 'AP_'))) {
+        return;
+    }
+    // to lower, remove AP_ prefix. ex) AP_Opiton => option
+    $classname = strtolower(str_replace('AP_', '', $classname));
+    $dirpath = dirname( __FILE__ ).'/includes/';
+    $filepath = $dirpath . 'class-'.$classname.'.php';
+    if (file_exists($filepath)) {
+        include $filepath;
+    }
+}
+spl_autoload_register('apft_autoloader');
+
 
 add_page_from_template();
 
@@ -33,17 +47,3 @@ function admin_init()
 
 add_action('init', 'admin_init');
 
-function apft_autoloader($classname) {
-    if (0 !== (strpos($classname, 'AP_'))) {
-        return;
-    }
-    // to lower, remove AP_ prefix. ex) AP_Opiton => option
-    $classname = strtolower(str_replace('AP_', '', $classname));
-    $dirpath = dirname( __FILE__ ).'/includes/';
-    //var_dump($classname);
-    $filepath = $dirpath . 'class-'.$classname.'.php';
-    if (file_exists($filepath)) {
-        include $filepath;
-    }
-}
-spl_autoload_register('apft_autoloader');

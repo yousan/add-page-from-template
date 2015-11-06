@@ -1,11 +1,7 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: yousan
- * Date: 9/30/15
- * Time: 5:09 PM
+ * TemlateSearchar
  */
-
 if (!class_exists('WP_AddRewriteRules')):
 
     include_once 'class-template.php';

@@ -38,19 +38,33 @@ class AP_Loader
         register_activation_hook(__FILE__, array(self::$instance, 'activation_callback'));
         register_deactivation_hook(__FILE__,  array(self::$instance, 'deactivation_callback'));
 
+        $this->register_update_rewrite_rules();
         // to prevent multiple template searcher runs, make this class singleton.
-        add_action('init',  array(self::$instance, 'init'));
+        //add_action('init',  array(self::$instance, 'init'));
         add_filter('query_vars', array(self::$instance, 'query_vars'));
         add_action('template_redirect', array(self::$instance, 'template_redirect'));
         add_action('delete_option', array(self::$instance, 'delete_option'), 10, 1 );
     }
 
-    public function init()
+    /**
+     * rewrite_ruleを更新するタイミングを決定する
+     * オプションで「積極的な更新」を選択したときにはregistered_post_type
+     *
+     * thanks! the master of rewrite_rules!
+     * https://github.com/yousan/add-page-from-template/issues/1#event-456557115
+     */
+    private function register_update_rewrite_rules() {
+        $is_aggressive = AP_Option::get_('aggressive');
+        if ($is_aggressive) {
+            add_action('registered_post_type', array(self::$instance, 'update_rewrite_rules'));
+        }
+    }
+
+    public function update_rewrite_rules()
     {
         foreach($this->templates as $template) {
             add_rewrite_endpoint($template->getTemplateSlug(), EP_ROOT);
         }
-        // todo: option化
         flush_rewrite_rules();
     }
 

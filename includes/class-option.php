@@ -12,6 +12,8 @@ class AP_Option
      */
     private $options;
 
+    const APFT_OPTION_NAME = 'apft_options';
+
     /**
      * Start up
      */
@@ -19,6 +21,20 @@ class AP_Option
     {
         add_action( 'admin_menu', array( $this, 'add_plugin_page' ) );
         add_action( 'admin_init', array( $this, 'page_init' ) );
+    }
+
+    /**
+     * getter的ななにか
+     * @param $varname
+     * @return null
+     */
+    static public function get_($varname) {
+        $options = get_option( self::APFT_OPTION_NAME );
+        if (isset($options[$varname])) {
+            return $options[$varname];
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -42,7 +58,7 @@ class AP_Option
     public function create_admin_page()
     {
         // Set class property
-        $this->options = get_option( 'apft_options' );
+        $this->options = get_option( self::APFT_OPTION_NAME );
         ?>
         <div class="wrap">
             <?php screen_icon(); ?>
@@ -66,7 +82,7 @@ class AP_Option
     {
         register_setting(
             'apft_option_group', // Option group
-            'apft_options', // Option name
+            self::APFT_OPTION_NAME, // Option name
             array( $this, 'sanitize' ) // Sanitize
         );
 
