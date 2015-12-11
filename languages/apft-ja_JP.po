@@ -1,0 +1,67 @@
+# Translation of BackWPup Pro in Japanese
+# This file is distributed under the same license as the BackWPup Pro package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Add Page From Template\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-12-11 13:59+0900\n"
+"PO-Revision-Date: 2015-12-11 14:03+0900\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ja_JP\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 1.8.6\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: includes/class-option.php:65
+msgid "Add Page From Template"
+msgstr ""
+
+#: includes/class-option.php:91
+msgid "APFT Custom Settings"
+msgstr "APFT カスタム設定"
+
+#: includes/class-option.php:98
+msgid "'Aggressive' flush_rewrite"
+msgstr "「積極的な」flush_rewriteを実行する"
+
+#: includes/class-option.php:106
+msgid "Base Directory"
+msgstr "ベースとなるディレクトリ"
+
+#: includes/class-option.php:114
+msgid "Template Files"
+msgstr "テンプレートファイル"
+
+#: includes/class-option.php:147
+msgid "Enter your settings below:"
+msgstr "設定"
+
+#: includes/class-option.php:165
+msgid "Aggressive means 'Do flush_rewrite when load a page.'"
+msgstr ""
+"flush_rewriteを頻繁に行います。実運用での使用は非推奨です。開発環境ではオ"
+"ンにすることですぐに反映されます。\n"
+"オンにすると他のプラグインと衝突する場合があります。"
+
+#: includes/class-option.php:178
+msgid ""
+"Specify Base Directory. The paged template files should be located at the "
+"base directory. (Default: pages/)"
+msgstr ""
+"ベースディレクトリを指定してください。ベースディレクトリに配置されたテンプ"
+"レートファイルがAPFTによって固定ページとして追加されます。 (デフォルト: "
+"pages/)"
+
+#: includes/class-option.php:185
+msgid "Template Name"
+msgstr "テンプレート名"
+
+#: includes/class-option.php:186
+msgid "Status"
+msgstr "ステータス"

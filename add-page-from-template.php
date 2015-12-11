@@ -10,11 +10,10 @@
  * License: GPL2
  */
 if ( ! class_exists( 'AddPageFromTemplate' ) ) {
-    //define('APFT_I18N_DOMAIN', 'add-post-from-template');
 
     //Start Plugin
     if ( function_exists( 'add_filter' ) ) {
-        add_action( 'plugins_loaded', array( 'BackWPup', 'get_instance' ), 11 );
+        add_action( 'plugins_loaded', array( 'AddPageFromTemplate', 'getInstance' ), 11 );
     }
 
 
@@ -25,9 +24,10 @@ if ( ! class_exists( 'AddPageFromTemplate' ) ) {
         private static $loader = NULL;
 
 
-        private function __construct() {
+        private function __construct()
+        {
             //auto loader
-            spl_autoload_register( array( $this, 'autoloader' ) );
+            spl_autoload_register(array($this, 'autoloader'));
             $templates = AP_TemplateSearcher::getTemplates();
             $this->loader = AP_Loader::getInstance($templates);
 
@@ -37,15 +37,37 @@ if ( ! class_exists( 'AddPageFromTemplate' ) ) {
             }
         }
 
-        private function registerActions() {
+        private function registerActions()
+        {
             //spl_autoload_register('apft_autoloader');
         }
 
-        public function getInstance() {
+        public function getInstance()
+        {
             if (NULL === self::$instance) {
                 self::$instance = new self;
             }
             return self::$instance;
+        }
+
+        public static function loadTextDomain()
+        {
+            $domain = 'apft';
+
+            if (is_textdomain_loaded($domain)) {
+                return;
+            }
+
+            $locale = apply_filters('plugin_locale', get_locale(), $domain);
+            $mofile = $domain . '-' . $locale . '.mo';
+
+            // load translation from WordPress plugins language folder
+            if (load_textdomain($domain, WP_LANG_DIR . '/plugins/' . $mofile)) {
+                return;
+            }
+
+            // load translation from plugin folder
+            load_textdomain($domain, dirname(__FILE__) . '/languages/' . $mofile);
         }
 
         private function autoloader($classname)
@@ -60,13 +82,6 @@ if ( ! class_exists( 'AddPageFromTemplate' ) ) {
             if (file_exists($filepath)) {
                 include $filepath;
             }
-        }
-
-        function add_page_from_template()
-        {
-            //include_once 'includes/class-templatesearcher.php';
-            //include_once 'includes/class-loader.php';
-
         }
     }
 }
