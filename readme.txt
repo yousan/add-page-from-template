@@ -21,4 +21,10 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 == Screenshots ==
 
 
+== Changelog ==
 
+= Version 0.0.1 =
+* Upgraded: Added template list table at the setting page.
+
+= Version 0.0.0.1 =
+  * Plugin is born.
