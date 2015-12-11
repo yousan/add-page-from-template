@@ -9,7 +9,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Description ==
 
-* Add wordpress 'page' from php template file automatically
+* Add *Virtual* WordPress 'page' from php template file automatically
 * Not needed to add 'page' from admin panel
 
   The page-templates would be located at 'themes/your-theme/page-foobar.php' then the page will be created as 'http://www.example.com/foobar/' without admin panel.
@@ -19,7 +19,8 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
  Just add this plugins.
 
 == Screenshots ==
-
+1. Virtual page would be made.
+2. Just make a page-foobar.php at your themes/pages directory.
 
 == Changelog ==
 
