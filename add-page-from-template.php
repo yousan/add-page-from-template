@@ -26,6 +26,10 @@ if ( ! class_exists( 'AddPageFromTemplate' ) ) {
 
         private function __construct()
         {
+
+            //Load text domain
+
+
             //auto loader
             spl_autoload_register(array($this, 'autoloader'));
             $templates = AP_TemplateSearcher::getTemplates();
@@ -57,6 +61,7 @@ if ( ! class_exists( 'AddPageFromTemplate' ) ) {
             if (is_textdomain_loaded($domain)) {
                 return;
             }
+
 
             $locale = apply_filters('plugin_locale', get_locale(), $domain);
             $mofile = $domain . '-' . $locale . '.mo';

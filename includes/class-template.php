@@ -8,7 +8,11 @@
  */
 
 class AP_Template {
+
     public $path;
+    public $filename;
+    public $slug = '';
+    public $status = NULL;
 
     public function getTemplateSlug() {
         $pattern = '/.*\/page-(?P<slug>.*)\.php$/';
@@ -21,5 +25,16 @@ class AP_Template {
 
     public function __construct($path) {
         $this->path = $path;
+        $this->filename = basename($path);
+        if ( $this->filename ) { // page-hoge.php => hoge
+            $pattern = '/^page-(.*)\.php$/';
+            $replacement = '${1}';
+            $this->slug = preg_replace($pattern, $replacement, $this->filename);
+        }
+        $this->status = $this->getStatus();
+    }
+
+    private function getStatus() {
+        return AP_TemplateStatus::ENABLED;
     }
 }

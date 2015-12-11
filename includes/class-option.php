@@ -19,6 +19,8 @@ class AP_Option
      */
     public function __construct()
     {
+        AddPageFromTemplate::loadTextDomain();
+
         add_action( 'admin_menu', array( $this, 'add_plugin_page' ) );
         add_action( 'admin_init', array( $this, 'page_init' ) );
     }
@@ -61,8 +63,8 @@ class AP_Option
         $this->options = get_option( self::APFT_OPTION_NAME );
         ?>
         <div class="wrap">
-            <?php screen_icon(); ?>
-            <h2><?php _e('Add Page From Template', APFT_I18N_DOMAIN)?></h2>
+            <?php //screen_icon(); ?>
+            <h2><?php _e('Add Page From Template (APFT)', 'apft')?></h2>
             <form method="post" action="options.php">
                 <?php
                 // This prints out all hidden setting fields
@@ -88,14 +90,14 @@ class AP_Option
 
         add_settings_section(
             'setting_apft', // ID
-            __('APFT Custom Settings', APFT_I18N_DOMAIN), // Title
+            __('APFT Custom Settings', 'apft'), // Title
             array( $this, 'print_section_info' ), // Callback
             'apft-setting-admin' // Page
         );
 
         add_settings_field(
             'is_aggressive', // ID
-            __("'Aggressive' flush_rewrite", APFT_I18N_DOMAIN), // Title
+            __("'Aggressive' flush_rewrite", 'apft'), // Title
             array( $this, 'is_aggressive_callback' ), // Callback
             'apft-setting-admin', // Page
             'setting_apft' // Section
@@ -103,7 +105,7 @@ class AP_Option
 
         add_settings_field(
             'base_dir',
-            __('Base Directory', APFT_I18N_DOMAIN),
+            __('Base Directory', 'apft'),
             array( $this, 'base_dir_callback' ),
             'apft-setting-admin',
             'setting_apft'
@@ -111,7 +113,7 @@ class AP_Option
 
         add_settings_field(
             'template_files',
-            __('Template Files', APFT_I18N_DOMAIN),
+            __('Template Files', 'apft'),
             array( $this, 'template_files_callback' ),
             'apft-setting-admin',
             'setting_apft'
@@ -162,9 +164,13 @@ class AP_Option
             '<input type="checkbox" id="aggressive" name="apft_options[aggressive]" value="1" %s />',
             $checked
         );
-        echo _("Aggressive means 'Do flush_rewrite when load a page.'").'</p>';
+        _e("Aggressive means 'Do flush_rewrite when load a page.'", 'apft');
+        echo '</p>';
     }
 
+    /**
+     * ベースディレクトリの設定部分
+     */
     public function base_dir_callback() {
         if (isset( $this->options['base_dir'] )) {
             $base_dir = esc_attr( $this->options['base_dir']);
@@ -175,22 +181,52 @@ class AP_Option
             '<input type="text" id="base_dir" name="apft_options[base_dir]" value="%s" style="width: 100%%;"/>',
             $base_dir
         );
-        _e('Specify Base Directory. The paged template files should be located at the base directory. (Default: pages/)', APFT_I18N_DOMAIN);
+        _e('Specify Base Directory. The paged template files should be located at the base directory. (Default: pages/)', 'apft');
     }
 
+    /**
+     * テンプレートファイル一覧の設定部分
+     */
     public function template_files_callback() {
+        $templates = AP_TemplateSearcher::getTemplates();
         ?>
         <table class="widefat" id="apft-templates">
             <thead><tr class="head" style="cursor: move;">
-                <th scope="col"><?php _e('Template Name', APFT_I18N_DOMAIN); ?></th>
-                <th scope="col"><?php _e('Status', APFT_I18N_DOMAIN);?></th>
+                <th scope="col"><?php _e('Template Name', 'apft'); ?></th>
+                <th scope="col"><?php _e('Status', 'apft'); ?></th>
+                <th scope="col"><?php _e('Actions', 'apft'); ?></th>
             </tr>
             </thead>
             <tbody>
-            <tr class="nodrag nodrop">
-                <td>&nbsp;</td>
-                <td>hoge</td>
-            </tr>
+            <?php foreach ($templates as $template) { ?>
+                <tr class="nodrag nodrop">
+                    <td><?php echo $template->slug; ?></td>
+                    <td class="apft-status-<?php echo $template->status;?>">
+                        <?php _e(ucfirst($template->status), 'apft'); ?>
+                    </td>
+                    <?php // http://ex1.aramaki.l2tp.org/wp-admin/theme-editor.php?file=pages%2Fpage-fuga.php&theme=twentyfourteen-child ?>
+                    <?php
+                    // ファイルパス テーマディレクトリから下 URLエンコードが必要
+                    // ex) pages%2Fpage-fuga.php
+                    $filepath = urlencode(str_replace( get_stylesheet_directory().'/', '', $template->path));
+                    $themeName = basename(get_stylesheet_directory());
+                    $editUrl = home_url('/wp-admin/theme-editor.php?file='.$filepath.'&theme='.$themeName);
+                    ?>
+                    <td>
+                        <span class="apft-action-edit">
+                            <a href="<?php echo esc_url($editUrl); ?>">
+                                <?php _e('Edit', 'apft'); ?>
+                            </a>
+                        </span>
+                        |
+                        <span class="apftp-action-view">
+                            <a href="<?php echo esc_url(home_url($template->slug)); ?>">
+                                <?php _e('View', 'apft'); ?>
+                            </a>
+                        </span>
+                    </td>
+                </tr>
+            <?php } ?>
 <!--            <tr class="nodrag nodrop">-->
 <!--                <td>&nbsp;</td>-->
 <!--                <td><i>Registration IP</i></td>-->
@@ -201,6 +237,9 @@ class AP_Option
 <!--                </td>-->
 <!--            </tr>-->
             </tbody></table>
+        <div class="footnote">
+            <?php _e('Status: Conflict means same slug alredy exists.'); ?>
+        </div>
         <?php
     }
 
