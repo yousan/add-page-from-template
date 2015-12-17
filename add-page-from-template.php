@@ -21,7 +21,7 @@ if ( ! class_exists( 'AddPageFromTemplate' ) ) {
     {
 
         private static $instance = NULL;
-        private static $loader = NULL;
+        private $loader = NULL;
 
 
         private function __construct()
@@ -46,7 +46,7 @@ if ( ! class_exists( 'AddPageFromTemplate' ) ) {
             //spl_autoload_register('apft_autoloader');
         }
 
-        public function getInstance()
+        public static function getInstance()
         {
             if (NULL === self::$instance) {
                 self::$instance = new self;
