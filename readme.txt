@@ -10,12 +10,12 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 == Description ==
 
 Are you tired to create pages through different environments?
-**PAGE** exhausts you to share the template files with co-workers.
+
 
 * Add **Virtual** WordPress 'page' from php template file automatically
 * Not needed to add 'page' from admin panel
 
- The page-templates would be located at 'themes/your-theme/page-foobar.php' then the page will be created as 'http://www.example.com/foobar/' without admin panel.
+ The page-xxx.php would be located at 'themes/your-theme/page-foobar.php' then the page will be created as 'http://www.example.com/foobar/' without admin panel.
   
 == Installation ==
 
@@ -51,6 +51,13 @@ Please send the problem to the author.
 https://github.com/yousan/add-page-from-template/issues
 
 == Changelog ==
+
+= Version 0.2 =
+* Fixed: version number.
+* Fixed: Reload pages when the plugin is activated.
+
+= Version 0.1 =
+* Fixed: Remove Warning.
 
 = Version 0.0.1 =
 * Upgraded: Added template list table at the setting page.

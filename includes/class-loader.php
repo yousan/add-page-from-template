@@ -35,9 +35,6 @@ class AP_Loader
      *
      */
     private function initialize() {
-        register_activation_hook(__FILE__, array(self::$instance, 'activation_callback'));
-        register_deactivation_hook(__FILE__,  array(self::$instance, 'deactivation_callback'));
-
         $this->register_update_rewrite_rules();
         // to prevent multiple template searcher runs, make this class singleton.
         //add_action('init',  array(self::$instance, 'init'));
@@ -91,25 +88,6 @@ class AP_Loader
         }
     }
 
-
-    public function activation_callback() {
-        /*
-         * プラグインが有効化されていることをオプションに保存する
-         * この時点でis_plugin_active()の戻り値はfalse
-         */
-        update_option( 'apft_plugin_activated', true );
-        flush_rewrite_rules();
-    }
-
-// 無効化時の処理
-    public function deactivation_callback() {
-        /*
-         * プラグインが無効化された！
-         * この時点でis_plugin_active()の戻り値はtrue
-         */
-        delete_option( 'apft_plugin_activated' );
-        flush_rewrite_rules();
-    }
 
 // delete_optionフックのコールバック関数
     public function delete_option($option){

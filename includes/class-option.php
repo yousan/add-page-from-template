@@ -185,6 +185,22 @@ class AP_Option
     }
 
     /**
+     * Returns page slug.
+     *
+     * @see _get_page_link()
+     */
+    private function getPageLink($slug){
+        global $wp_rewrite;
+        $link = $wp_rewrite->get_page_permastruct();
+
+        $link = str_replace('%pagename%', $slug, $link);
+        $link = home_url($link);
+        $link = user_trailingslashit($link, 'page');
+        return apply_filters( '_get_page_link', $link, 0 );
+
+    }
+
+    /**
      * テンプレートファイル一覧の設定部分
      */
     public function template_files_callback() {
@@ -198,6 +214,10 @@ class AP_Option
             </tr>
             </thead>
             <tbody>
+            <?php
+            $url = $this->getPageLink('hoge');
+            var_dump($url);
+            ?>
             <?php foreach ($templates as $template) { ?>
                 <tr class="nodrag nodrop">
                     <td><?php echo $template->slug; ?></td>
@@ -220,7 +240,7 @@ class AP_Option
                         </span>
                         |
                         <span class="apftp-action-view">
-                            <a href="<?php echo esc_url(home_url($template->slug)); ?>">
+                            <a href="<?php echo $this->getPageLink($template->slug); ?>">
                                 <?php _e('View', 'apft'); ?>
                             </a>
                         </span>
