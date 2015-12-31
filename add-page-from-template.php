@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/yousan/add-page-from-template
  * Description(en): Add pages from template files.
  * Description: Creates virtural page from template file.
- * Version: 0.2
+ * Version: 0.3
  * Author: Yousan_O
  * Author URI: http://www.l2tp.org
  * License: GPL2

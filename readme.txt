@@ -52,6 +52,10 @@ https://github.com/yousan/add-page-from-template/issues
 
 == Changelog ==
 
+= Version 0.3 =
+* Fixed: Removed debug code.
+* Fixed: Added pagename when apft virtual page loaded.
+
 = Version 0.2 =
 * Fixed: version number.
 * Fixed: Reload pages when the plugin is activated.

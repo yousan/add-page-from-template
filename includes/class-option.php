@@ -197,7 +197,6 @@ class AP_Option
         $link = home_url($link);
         $link = user_trailingslashit($link, 'page');
         return apply_filters( '_get_page_link', $link, 0 );
-
     }
 
     /**
@@ -214,10 +213,6 @@ class AP_Option
             </tr>
             </thead>
             <tbody>
-            <?php
-            $url = $this->getPageLink('hoge');
-            var_dump($url);
-            ?>
             <?php foreach ($templates as $template) { ?>
                 <tr class="nodrag nodrop">
                     <td><?php echo $template->slug; ?></td>

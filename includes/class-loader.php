@@ -41,6 +41,22 @@ class AP_Loader
         add_filter('query_vars', array(self::$instance, 'query_vars'));
         add_action('template_redirect', array(self::$instance, 'template_redirect'));
         add_action('delete_option', array(self::$instance, 'delete_option'), 10, 1 );
+        add_action('pre_get_posts', array(self::$instance, 'pre_get_posts'));
+    }
+
+    /**
+     * queryvarsのpagenameをセット
+     */
+    public function pre_get_posts() {
+        /** @var WP_Query */
+        global $wp_query;
+        global $wp_rewrite;
+        $request_url = $_SERVER['REQUEST_URI'];
+        $request_url =user_trailingslashit($request_url);
+        // remove slash   "/hoge/" => "hoge"
+        $slug = preg_replace('#^/?([^/]+)/?$#', '\\1', $request_url);
+        $wp_query->set('pagename', $slug);
+        return $wp_query;
     }
 
     /**
