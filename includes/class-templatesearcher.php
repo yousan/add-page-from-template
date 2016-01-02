@@ -17,7 +17,8 @@ if (!class_exists('WP_AddRewriteRules')):
         }
 
         private static function setPath() {
-            self::$path = get_stylesheet_directory().'/pages/';
+            self::$path = (get_stylesheet_directory() . DIRECTORY_SEPARATOR .
+                AP_Option::get_('base_dir'));
         }
 
         /**
@@ -25,15 +26,47 @@ if (!class_exists('WP_AddRewriteRules')):
          */
         public static function getTemplates() {
             self::setPath();
+
             if (!is_dir(self::$path)) {
                 return array();
             }
 
             $rets = array();
-            foreach(glob(self::$path.'page-*.php') as $file) {
-                $rets[] = new AP_Template($file);
+            $basedir_path = preg_replace('#/+$#', '', self::$path); // remove last slash
+            $files = self::filesToArray($basedir_path);
+            foreach ($files as $file) {
+                try {
+                    $template = new AP_Template($file);
+                    $rets[] = $template;
+                } catch (Exception $e){
+                    // do nothing. just invalid filename.
+                }
             }
             return $rets;
+        }
+
+        /**
+         * recursive search.
+         * Return only file.
+         *
+         * @param $dir
+         * @return string[]
+         */
+        private static function filesToArray($dir)
+        {
+            $result = array();
+            $cdir = scandir($dir);
+            foreach ( $cdir as $key => $value ){
+                if (!in_array($value, array('.', '..'))) {
+                    if (is_dir($dir . DIRECTORY_SEPARATOR . $value)) {
+                        $result = array_merge($result,
+                            static::filesToArray($dir . DIRECTORY_SEPARATOR . $value));
+                    } else {
+                        $result[] = $dir . DIRECTORY_SEPARATOR .$value;
+                    }
+                }
+            }
+            return $result;
         }
     }
 

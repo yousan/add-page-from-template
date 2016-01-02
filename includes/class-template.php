@@ -13,28 +13,44 @@ class AP_Template {
     public $filename;
     public $slug = '';
     public $status = NULL;
-
-    public function getTemplateSlug() {
-        $pattern = '/.*\/page-(?P<slug>.*)\.php$/';
-        if (preg_match($pattern, $this->path, $match)) {
-            return $match['slug'];
-        } else { // nothing to mach
-
-        }
-    }
+    public $pagename = '';
 
     public function __construct($path) {
         $this->path = $path;
         $this->filename = basename($path);
-        if ( $this->filename ) { // page-hoge.php => hoge
-            $pattern = '/^page-(.*)\.php$/';
-            $replacement = '${1}';
-            $this->slug = preg_replace($pattern, $replacement, $this->filename);
+        $pattern = '#^(?<path>.*)page-(?<unislug>[^\.]+)\.php$#';
+
+        // abspath => relpath
+        $fullBaseDir = untrailingslashit(get_stylesheet_directory().DIRECTORY_SEPARATOR.
+            AP_Option::get_('base_dir').DIRECTORY_SEPARATOR);
+        $fullBaseDir = preg_replace('#/+#','/', $fullBaseDir); // remove duplicate slash
+
+        $relpath = str_replace($fullBaseDir, '', $this->path);
+        if ( !empty($this->filename) &&
+             !empty($relpath) &&
+            preg_match($pattern, $relpath, $match)) { // page-hoge.php => hoge
+            $slug = stripslashes($match['path'] . $match['unislug']);
+            $this->slug = preg_replace('#^/#', '', $slug);
+            $this->pagename = $match['unislug'];
+        } else {
+            throw new Exception('Invalid Template Path'); // no one shows, just return
         }
         $this->status = $this->getStatus();
     }
 
+    /**
+     * Returns a template slug name.
+     * pages/page-hoge.php => hoge
+     * pages/hoge/page-fuga.php => fuga
+     *
+     * @return string
+     */
+    public function getTemplateSlug() {
+        return $this->slug;
+    }
+
     private function getStatus() {
+        // incomplete
         return AP_TemplateStatus::ENABLED;
     }
 }

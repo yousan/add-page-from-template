@@ -41,22 +41,15 @@ class AP_Loader
         add_filter('query_vars', array(self::$instance, 'query_vars'));
         add_action('template_redirect', array(self::$instance, 'template_redirect'));
         add_action('delete_option', array(self::$instance, 'delete_option'), 10, 1 );
-        add_action('pre_get_posts', array(self::$instance, 'pre_get_posts'));
     }
 
     /**
      * queryvarsのpagenameをセット
      */
-    public function pre_get_posts() {
+    public function setPagename($pagename) {
         /** @var WP_Query */
         global $wp_query;
-        global $wp_rewrite;
-        $request_url = $_SERVER['REQUEST_URI'];
-        $request_url =user_trailingslashit($request_url);
-        // remove slash   "/hoge/" => "hoge"
-        $slug = preg_replace('#^/?([^/]+)/?$#', '\\1', $request_url);
-        $wp_query->set('pagename', $slug);
-        return $wp_query;
+        $wp_query->set('pagename', $pagename);
     }
 
     /**
@@ -89,15 +82,18 @@ class AP_Loader
         return $vars;
     }
 
-
+    /**
+     * 実際に表示させているのはココ！
+     */
     public function template_redirect() {
         global $wp_query;
         foreach($this->templates as $template) {
             if (isset($wp_query->query[$template->getTemplateSlug()])) {
-                $template = $template->path;
-                apply_filters("page_template", $template);
-                if ($template = apply_filters('template_include', $template)) {
-                    include($template);
+                $templatePath = apply_filters("page_template", $template->path);
+                //add_action('pre_get_posts', array(self::$instance, 'pre_get_posts'));
+                $this->setPagename($template->pagename);
+                if ($templatePath = apply_filters('template_include', $templatePath)) {
+                    include($templatePath);
                 }
                 exit; // Stop!
             }
