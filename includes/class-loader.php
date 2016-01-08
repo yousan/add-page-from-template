@@ -52,6 +52,46 @@ class AP_Loader
         $wp_query->set('pagename', $pagename);
     }
 
+    private function setGlobalQuery() {
+        /** @var WP_Query */
+        global $wp_query;
+        $wp_query->is_home = false;
+        // 他にも必要そうなものがあればココでセットしていく
+        // $wp_query->set('is_home', false)は動かない
+    }
+
+    private function setGlobalPost() {
+        /** @var WP_Post */
+        global $post;
+
+        /** @see get_default_post_to_edit() */
+        /** @var stdClass */
+        $postObj = new stdClass;
+        $postObj->ID = 1;
+        $postObj->post_author = '';
+        $postObj->post_date = '';
+        $postObj->post_date_gmt = '';
+        $postObj->post_password = '';
+        $postObj->post_name = '';
+        $postObj->post_type = 'page';
+        $postObj->post_status = 'publish';
+        $postObj->to_ping = '';
+        $postObj->pinged = '';
+        $postObj->comment_status = get_default_comment_status( 'page' );
+        $postObj->ping_status = get_default_comment_status( 'page', 'pingback' );
+        $postObj->post_pingback = get_option( 'default_pingback_flag' );
+        $postObj->post_category = get_option( 'default_category' );
+        $postObj->page_template = 'default';
+        $postObj->post_parent = 0;
+        $postObj->menu_order = 0;
+        $post = new WP_Post( $postObj );
+
+        // set filter
+        // @see get_post()
+        // void '$_post = $_post->filter( $filter );' returns null
+        $post = sanitize_post( $post, 'raw' );
+    }
+
     /**
      * rewrite_ruleを更新するタイミングを決定する
      * オプションで「積極的な更新」を選択したときにはregistered_post_type
@@ -71,7 +111,6 @@ class AP_Loader
         foreach($this->templates as $template) {
             add_rewrite_endpoint($template->getTemplateSlug(), EP_ROOT);
         }
-        flush_rewrite_rules();
     }
 
 
@@ -92,6 +131,8 @@ class AP_Loader
                 $templatePath = apply_filters("page_template", $template->path);
                 //add_action('pre_get_posts', array(self::$instance, 'pre_get_posts'));
                 $this->setPagename($template->pagename);
+                $this->setGlobalPost();
+                $this->setGlobalQuery();
                 if ($templatePath = apply_filters('template_include', $templatePath)) {
                     include($templatePath);
                 }
