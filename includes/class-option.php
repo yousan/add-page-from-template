@@ -14,10 +14,13 @@ class AP_Option
 
     const APFT_OPTION_NAME = 'apft_options';
 
-    const defaults = array(
-        'is_aggressive' => false,
-        'base_dir' => 'pages/',
-    );
+
+    public static function getDefaults() {
+        return array(
+            'is_aggressive' => false,
+            'base_dir' => 'pages/',
+        );
+    }
 
     /**
      * Start up
@@ -40,7 +43,8 @@ class AP_Option
         if (isset($options[$varname])) {
             return $options[$varname];
         } else {
-            return self::defaults[$varname];
+            $defaults = self::getDefaults();
+            return $defaults[$varname];
         }
     }
 
