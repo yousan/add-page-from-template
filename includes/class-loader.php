@@ -60,11 +60,15 @@ class AP_Loader
         // $wp_query->set('is_home', false)は動かない
     }
 
+    /**
+     * Sets global $post variable.
+     *
+     * @see get_default_post_to_edit()
+     */
     private function setGlobalPost() {
         /** @var WP_Post */
         global $post;
 
-        /** @see get_default_post_to_edit() */
         /** @var stdClass */
         $postObj = new stdClass;
         $postObj->ID = 1;
@@ -77,8 +81,8 @@ class AP_Loader
         $postObj->post_status = 'publish';
         $postObj->to_ping = '';
         $postObj->pinged = '';
-        $postObj->comment_status = get_default_comment_status( 'page' );
-        $postObj->ping_status = get_default_comment_status( 'page', 'pingback' );
+        $postObj->comment_status = $this->getDefaultCommentStatus('page');
+        $postObj->ping_status = $this->getDefaultCommentStatus('page', 'pingback');
         $postObj->post_pingback = get_option( 'default_pingback_flag' );
         $postObj->post_category = get_option( 'default_category' );
         $postObj->page_template = 'default';
@@ -90,6 +94,17 @@ class AP_Loader
         // @see get_post()
         // void '$_post = $_post->filter( $filter );' returns null
         $post = sanitize_post( $post, 'raw' );
+    }
+
+    /** Absorb shocks of version difference.
+     * @see https://core.trac.wordpress.org/browser/tags/4.1/src/wp-admin/includes/post.php#L533
+     */
+    private function getDefaultCommentStatus($arg1=null, $arg2=null) {
+        if (function_exists('get_default_comment_status')) {
+            return get_default_comment_status( $arg1, $arg2 );
+        } else {
+            return get_option('default_comment_status');
+        }
     }
 
     /**
