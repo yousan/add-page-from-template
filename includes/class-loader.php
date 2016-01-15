@@ -96,7 +96,8 @@ class AP_Loader
         $post = sanitize_post( $post, 'raw' );
     }
 
-    /** Absorb shocks of version difference.
+    /**
+     * Absorb shocks of version difference.
      * @see https://core.trac.wordpress.org/browser/tags/4.1/src/wp-admin/includes/post.php#L533
      */
     private function getDefaultCommentStatus($arg1=null, $arg2=null) {

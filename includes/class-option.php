@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: yousan
@@ -15,7 +16,8 @@ class AP_Option
     const APFT_OPTION_NAME = 'apft_options';
 
 
-    public static function getDefaults() {
+    public static function getDefaults()
+    {
         return array(
             'is_aggressive' => false,
             'base_dir' => 'pages/',
@@ -29,8 +31,8 @@ class AP_Option
     {
         AddPageFromTemplate::loadTextDomain();
 
-        add_action( 'admin_menu', array( $this, 'add_plugin_page' ) );
-        add_action( 'admin_init', array( $this, 'page_init' ) );
+        add_action('admin_menu', array($this, 'add_plugin_page'));
+        add_action('admin_init', array($this, 'page_init'));
     }
 
     /**
@@ -38,8 +40,9 @@ class AP_Option
      * @param $varname
      * @return null
      */
-    static public function get_($varname) {
-        $options = get_option( self::APFT_OPTION_NAME );
+    static public function get_($varname)
+    {
+        $options = get_option(self::APFT_OPTION_NAME);
         if (isset($options[$varname])) {
             return $options[$varname];
         } else {
@@ -59,7 +62,7 @@ class AP_Option
             'Add Page From Template',
             'manage_options',
             'apft-setting-admin',
-            array( $this, 'create_admin_page' )
+            array($this, 'create_admin_page')
         );
     }
 
@@ -69,16 +72,17 @@ class AP_Option
     public function create_admin_page()
     {
         // Set class property
-        $this->options = get_option( self::APFT_OPTION_NAME );
+        $this->options = get_option(self::APFT_OPTION_NAME);
         ?>
         <div class="wrap">
-            <?php //screen_icon(); ?>
-            <h2><?php _e('Add Page From Template (APFT)', 'apft')?></h2>
+            <?php //screen_icon();
+            ?>
+            <h2><?php _e('Add Page From Template (APFT)', 'apft') ?></h2>
             <form method="post" action="options.php">
                 <?php
                 // This prints out all hidden setting fields
-                settings_fields( 'apft_option_group' );
-                do_settings_sections( 'apft-setting-admin' );
+                settings_fields('apft_option_group');
+                do_settings_sections('apft-setting-admin');
                 submit_button();
                 ?>
             </form>
@@ -94,20 +98,20 @@ class AP_Option
         register_setting(
             'apft_option_group', // Option group
             self::APFT_OPTION_NAME, // Option name
-            array( $this, 'sanitize' ) // Sanitize
+            array($this, 'sanitize') // Sanitize
         );
 
         add_settings_section(
             'setting_apft', // ID
             __('APFT Custom Settings', 'apft'), // Title
-            array( $this, 'print_section_info' ), // Callback
+            array($this, 'print_section_info'), // Callback
             'apft-setting-admin' // Page
         );
 
         add_settings_field(
             'is_aggressive', // ID
             __("'Aggressive' flush_rewrite", 'apft'), // Title
-            array( $this, 'is_aggressive_callback' ), // Callback
+            array($this, 'is_aggressive_callback'), // Callback
             'apft-setting-admin', // Page
             'setting_apft' // Section
         );
@@ -115,7 +119,7 @@ class AP_Option
         add_settings_field(
             'base_dir',
             __('Base Directory', 'apft'),
-            array( $this, 'base_dir_callback' ),
+            array($this, 'base_dir_callback'),
             'apft-setting-admin',
             'setting_apft'
         );
@@ -123,7 +127,7 @@ class AP_Option
         add_settings_field(
             'template_files',
             __('Template Files', 'apft'),
-            array( $this, 'template_files_callback' ),
+            array($this, 'template_files_callback'),
             'apft-setting-admin',
             'setting_apft'
         );
@@ -135,17 +139,17 @@ class AP_Option
      * @param array $input Contains all settings fields as array keys
      * @return array
      */
-    public function sanitize( $input )
+    public function sanitize($input)
     {
         $new_input = array();
-        if( isset( $input['aggressive'] ) ) {
+        if (isset($input['aggressive'])) {
             $new_input['aggressive'] = $input['aggressive'];
         } else {
             $new_input['aggressive'] = false;
         }
 
-        if( isset( $input['title'] ) )
-            $new_input['title'] = sanitize_text_field( $input['title'] );
+        if (isset($input['title']))
+            $new_input['title'] = sanitize_text_field($input['title']);
 
         return $new_input;
     }
@@ -163,7 +167,7 @@ class AP_Option
      */
     public function is_aggressive_callback()
     {
-        if ( isset($this->options['aggressive']) && false == $this->options['aggressive'] ) {
+        if (isset($this->options['aggressive']) && false == $this->options['aggressive']) {
             $checked = '';
         } else {
             $checked = 'checked="checked"';
@@ -180,10 +184,11 @@ class AP_Option
     /**
      * ベースディレクトリの設定部分
      */
-    public function base_dir_callback() {
-        if (isset( $this->options['base_dir'] )) {
-            $base_dir = esc_attr( $this->options['base_dir']);
-        }  else {
+    public function base_dir_callback()
+    {
+        if (isset($this->options['base_dir'])) {
+            $base_dir = esc_attr($this->options['base_dir']);
+        } else {
             $base_dir = 'pages/';
         }
         printf(
@@ -198,24 +203,27 @@ class AP_Option
      *
      * @see _get_page_link()
      */
-    private function getPageLink($slug){
+    private function getPageLink($slug)
+    {
         global $wp_rewrite;
         $link = $wp_rewrite->get_page_permastruct();
 
         $link = str_replace('%pagename%', $slug, $link);
         $link = home_url($link);
         $link = user_trailingslashit($link, 'page');
-        return apply_filters( '_get_page_link', $link, 0 );
+        return apply_filters('_get_page_link', $link, 0);
     }
 
     /**
      * テンプレートファイル一覧の設定部分
      */
-    public function template_files_callback() {
+    public function template_files_callback()
+    {
         $templates = AP_TemplateSearcher::getTemplates();
         ?>
         <table class="widefat" id="apft-templates">
-            <thead><tr class="head" style="cursor: move;">
+            <thead>
+            <tr class="head" style="cursor: move;">
                 <th scope="col"><?php _e('Template Name', 'apft'); ?></th>
                 <th scope="col"><?php _e('Status', 'apft'); ?></th>
                 <th scope="col"><?php _e('Actions', 'apft'); ?></th>
@@ -225,16 +233,16 @@ class AP_Option
             <?php foreach ($templates as $template) { ?>
                 <tr class="nodrag nodrop">
                     <td><?php echo $template->slug; ?></td>
-                    <td class="apft-status-<?php echo $template->status;?>">
+                    <td class="apft-status-<?php echo $template->status; ?>">
                         <?php _e(ucfirst($template->status), 'apft'); ?>
                     </td>
                     <?php // http://ex1.aramaki.l2tp.org/wp-admin/theme-editor.php?file=pages%2Fpage-fuga.php&theme=twentyfourteen-child ?>
                     <?php
                     // ファイルパス テーマディレクトリから下 URLエンコードが必要
                     // ex) pages%2Fpage-fuga.php
-                    $filepath = urlencode(str_replace( get_stylesheet_directory().'/', '', $template->path));
+                    $filepath = urlencode(str_replace(get_stylesheet_directory() . '/', '', $template->path));
                     $themeName = basename(get_stylesheet_directory());
-                    $editUrl = home_url('/wp-admin/theme-editor.php?file='.$filepath.'&theme='.$themeName);
+                    $editUrl = home_url('/wp-admin/theme-editor.php?file=' . $filepath . '&theme=' . $themeName);
                     ?>
                     <td>
                         <span class="apft-action-edit">
@@ -251,16 +259,17 @@ class AP_Option
                     </td>
                 </tr>
             <?php } ?>
-<!--            <tr class="nodrag nodrop">-->
-<!--                <td>&nbsp;</td>-->
-<!--                <td><i>Registration IP</i></td>-->
-<!--                <td><i>wpmem_reg_ip</i></td>-->
-<!--                <td colspan="5">&nbsp;</td>-->
-<!--                <td align="center">-->
-<!--                    <input type="checkbox" name="ut_fields[wpmem_reg_ip]" value="Registration IP">-->
-<!--                </td>-->
-<!--            </tr>-->
-            </tbody></table>
+            <!--            <tr class="nodrag nodrop">-->
+            <!--                <td>&nbsp;</td>-->
+            <!--                <td><i>Registration IP</i></td>-->
+            <!--                <td><i>wpmem_reg_ip</i></td>-->
+            <!--                <td colspan="5">&nbsp;</td>-->
+            <!--                <td align="center">-->
+            <!--                    <input type="checkbox" name="ut_fields[wpmem_reg_ip]" value="Registration IP">-->
+            <!--                </td>-->
+            <!--            </tr>-->
+            </tbody>
+        </table>
         <div class="footnote">
             <?php _e('Status: Conflict means same slug alredy exists.'); ?>
         </div>
@@ -274,7 +283,7 @@ class AP_Option
     {
         printf(
             '<input type="text" id="title" name="my_option_name[title]" value="%s" />',
-            isset( $this->options['title'] ) ? esc_attr( $this->options['title']) : ''
+            isset($this->options['title']) ? esc_attr($this->options['title']) : ''
         );
     }
 }

@@ -52,6 +52,9 @@ https://github.com/yousan/add-page-from-template/issues
 
 == Changelog ==
 
+= Version 0.4.1 =
+* Fixed: For old WP_version <= 4.3.
+
 = Version 0.4 =
 * Fixed: APFT Overrides global $post. Now we can use function/tags which refers to global $post such as get_post_type().
 
