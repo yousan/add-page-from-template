@@ -1,29 +1,8 @@
 language: php
-
 notifications:
-  email:
-    on_success: never
-    on_failure: change
-
+  slack:
+    secure: PgD4pnEZ5jFNYNzxn7dv49exT16T31QcV6QrP3CrOw5gnnUhtzDHBys5t6bW2pgUDxaP9PO8DYUusCeRqFmnXweIkxoIjXD6khiuGgZbu2QCQxXrgX/tNztpy+9FJ6/JgQWeiOwk5XqyWJd0986JmKsrVAXYoX2wzWQ7oS+j27OIKW0fZic+r2hM+W4g24QWN3La7OkQI9oYn5lf3Op2BH9maZlhNV3kSxe19XR4me9ot4F0g4jZEELI6MPN+rJQ6ghuE5rUaoDc9peylWrz83ykAog3qIc6EBmzZ7hWo8M1G1UEte/CDOsJ358tCYQ+p0RZlSjmkZZS2DredxtyR7dPBfkreg7VCWP7xrp+ecW1SlsKvhbhm1+6pZ+pkO62BUDHMLK0pZ+u6MX/WS1IV69onAkcbzFh8BjDYAC5AiCgVnKyZ0UTEeWr3iQteQkzrH5giY2DRNDdQO1XaH8hd74zdnWt0Tqftz0LUhvqfj/qTI31lJ1XAmVe3tmdwnzy2i1GFBBuylHiimJ6eHOWJSwq4wEJBtbXVV5jFbptBd5Hldu9UOq8ZJ+NZxV435q6dFq/H+z6UdDPozDmu0/nHAf1VQodVCxPJvSJTWKNtb2sc/OK/V7uX5KBpPH+O8Wq1JMHKdKWkxKyBWZYu8LcF26LmDhgMVUWnLfQtYCJXpc=
 php:
-  - 5.3
-#  - 5.6
-#  - 7
-#  - hhvm
-
-#matrix:
-#  include:
-#    - php: 5.3
-#      env: WP_VERSION=latest WP_MULTISITE=0 WP_PULUGIN_DEPLOY=0
-#  allow_failures:
-#    - php: hhvm
-#    - php: 7
-
-
-
+- 5.3
 before_script:
-  - bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
-
-#env:
-#  matrix:
-#    - WP_VERSION=trunk WP_MULTISITE=1
+- bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
