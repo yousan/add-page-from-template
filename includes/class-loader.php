@@ -113,7 +113,7 @@ class AP_Loader
      * オプションで「積極的な更新」を選択したときにはregistered_post_type
      *
      * thanks! the master of rewrite_rules!
-     * https://github.com/yousan/add-page-from-template/issues/1#event-456557115
+     * @link https://github.com/yousan/add-page-from-template/issues/1#event-456557115
      */
     private function register_update_rewrite_rules() {
         $is_aggressive = AP_Option::get_('aggressive');
@@ -127,6 +127,7 @@ class AP_Loader
         foreach($this->templates as $template) {
             add_rewrite_endpoint($template->getTemplateSlug(), EP_ROOT);
         }
+	    flush_rewrite_rules();
     }
 
 

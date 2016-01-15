@@ -19,7 +19,7 @@ class AP_Option
     public static function getDefaults()
     {
         return array(
-            'is_aggressive' => false,
+            'aggressive' => false,
             'base_dir' => 'pages/',
         );
     }
