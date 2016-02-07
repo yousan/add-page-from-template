@@ -259,15 +259,6 @@ class AP_Option
                     </td>
                 </tr>
             <?php } ?>
-            <!--            <tr class="nodrag nodrop">-->
-            <!--                <td>&nbsp;</td>-->
-            <!--                <td><i>Registration IP</i></td>-->
-            <!--                <td><i>wpmem_reg_ip</i></td>-->
-            <!--                <td colspan="5">&nbsp;</td>-->
-            <!--                <td align="center">-->
-            <!--                    <input type="checkbox" name="ut_fields[wpmem_reg_ip]" value="Registration IP">-->
-            <!--                </td>-->
-            <!--            </tr>-->
             </tbody>
         </table>
         <div class="footnote">
