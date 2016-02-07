@@ -52,6 +52,9 @@ https://github.com/yousan/add-page-from-template/issues
 
 == Changelog ==
 
+= Version 0.4.2 =
+* Fixed: Removed a warning.
+
 = Version 0.4.1 =
 * Fixed: For old WP_version <= 4.3.
 
