@@ -9,8 +9,20 @@
 
 class AP_Template {
 
+	/**
+	 * Fullpath
+	 * ex.) /path/to/theme/pages/page-hoge.php
+	 *
+	 * @var string
+	 */
     public $path;
 
+	/**
+	 * Filename
+	 * ex.) page-hoge.php
+	 *
+	 * @var string
+	 */
     public $filename;
 
     public $slug = '';
@@ -18,9 +30,33 @@ class AP_Template {
     public $status = NULL;
     public $pagename = '';
 
-    public function __construct($path) {
+	/**
+	 * Headers for template files.
+	 *
+	 * @static
+	 * @access private
+	 * @var array
+	 * @see WP_Theme
+	 */
+	private static $file_headers = array(
+		'Title' => 'Title',
+	);
+
+
+	/**
+	 * Header data from the theme's template file.
+	 *
+	 * @access private
+	 * @var array
+	 */
+	private $headers = array();
+
+
+
+	public function __construct($path) {
         $this->path = $path;
         $this->filename = basename($path);
+		$this->retrieveHeaders();
         $pattern = '#^(?<path>.*)page-(?<unislug>[^\.]+)\.php$#';
 
         // abspath => relpath
@@ -40,6 +76,13 @@ class AP_Template {
         }
         $this->status = $this->getStatus();
     }
+
+	private function retrieveHeaders() {
+		$this->headers = get_file_data( $this->path, self::$file_headers );
+		if ( isset( $this->headers['Title'] ) ) {
+			$this->title = $this->headers['Title'];
+		}
+	}
 
     /**
      * Returns a template slug name.
@@ -63,11 +106,22 @@ class AP_Template {
      * Retrieve title from template file.
      */
     public function getTitle() {
-        var_dump($this);
+	    return $this->title;
     }
 
-    public function retrieveTitle($content) {
-        return '';
+	/**
+	 * Retrieve title from template file.
+	 * Returns the first title.
+	 * Title: OK!
+	 *
+	 * @param $content
+	 *
+	 * @return string
+	 * @see get_file_data()
+	 * @see WP_Theme::file_headers
+	 */
+    public function retrieveTitle($filepath) {
+	    //
     }
 
 }
