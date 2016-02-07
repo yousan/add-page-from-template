@@ -224,6 +224,7 @@ class AP_Option
         <table class="widefat" id="apft-templates">
             <thead>
             <tr class="head" style="cursor: move;">
+                <th scope="col"><?php _e('Title', 'apft'); ?></th>
                 <th scope="col"><?php _e('Template Name', 'apft'); ?></th>
                 <th scope="col"><?php _e('Status', 'apft'); ?></th>
                 <th scope="col"><?php _e('Actions', 'apft'); ?></th>
@@ -232,6 +233,7 @@ class AP_Option
             <tbody>
             <?php foreach ($templates as $template) { ?>
                 <tr class="nodrag nodrop">
+                    <td><?php echo $template->title; ?></td>
                     <td><?php echo $template->slug; ?></td>
                     <td class="apft-status-<?php echo $template->status; ?>">
                         <?php _e(ucfirst($template->status), 'apft'); ?>
