@@ -10,8 +10,11 @@
 class AP_Template {
 
     public $path;
+
     public $filename;
+
     public $slug = '';
+    public $title = '';
     public $status = NULL;
     public $pagename = '';
 
@@ -50,7 +53,16 @@ class AP_Template {
     }
 
     private function getStatus() {
+        /** @var WP_Rewrite */
+        //$wp_rewrite;
         // incomplete
         return AP_TemplateStatus::ENABLED;
+    }
+
+    /**
+     * Retrieve title from header comment.
+     */
+    public function getTitle() {
+        var_dump($this);
     }
 }

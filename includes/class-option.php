@@ -104,7 +104,7 @@ class AP_Option
         add_settings_section(
             'setting_apft', // ID
             __('APFT Custom Settings', 'apft'), // Title
-            array($this, 'print_section_info'), // Callback
+            null, // Callback
             'apft-setting-admin' // Page
         );
 

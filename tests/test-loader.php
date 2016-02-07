@@ -25,8 +25,10 @@ class AP_Loader_Test extends WP_UnitTestCase {
 	 *
 	 */
 	public function testRegister_update_rewrite_rules() {
-		$loader = new AP_Loader();
+		global $wp_query;
+		$loader = new AP_Loader(AP_TemplateSearcher::getTemplates());
 		//$loader->
-		$this->assertQueryTrue('is_page');
+		$this->go_to( '/' );
+		$this->assertQueryTrue('is_home');
 	}
 }

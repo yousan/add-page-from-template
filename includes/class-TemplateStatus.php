@@ -11,4 +11,5 @@ final class AP_TemplateStatus extends AP_Enum
     const ENABLED = 'enabled';
     const DISABLED = 'disabled';
     const CONFLICTED = 'conflicted';
+    const NOTLOADED = 'notloaded';
 }
