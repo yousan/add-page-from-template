@@ -65,7 +65,7 @@ class AP_Loader
      *
      * @see get_default_post_to_edit()
      */
-    private function setGlobalPost() {
+    private function setGlobalPost(AP_Template $template) {
         /** @var WP_Post */
         global $post;
 
@@ -76,7 +76,8 @@ class AP_Loader
         $postObj->post_date = '';
         $postObj->post_date_gmt = '';
         $postObj->post_password = '';
-        $postObj->post_name = '';
+        $postObj->post_title = $template->title;
+        $postObj->post_name = sanitize_title($template->title);
         $postObj->post_type = 'page';
         $postObj->post_status = 'publish';
         $postObj->to_ping = '';
@@ -148,7 +149,7 @@ class AP_Loader
                 $templatePath = apply_filters("page_template", $template->path);
                 //add_action('pre_get_posts', array(self::$instance, 'pre_get_posts'));
                 $this->setPagename($template->pagename);
-                $this->setGlobalPost();
+                $this->setGlobalPost($template);
                 $this->setGlobalQuery();
                 if ($templatePath = apply_filters('template_include', $templatePath)) {
                     include($templatePath);

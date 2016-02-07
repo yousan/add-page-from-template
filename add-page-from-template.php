@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/yousan/add-page-from-template
  * Description(en): Add pages from template files.
  * Description: Creates virtural page from template file.
- * Version: 0.4.2
+ * Version: 0.4.3.1
  * Author: Yousan_O
  * Author URI: http://www.l2tp.org
  * License: GPL2
@@ -57,9 +57,11 @@ if ( ! class_exists( 'AddPageFromTemplate' ) ) {
          */
         public static function activation_callback() {
             self::getInstance(); // We need instance
-            self::$instance->loader->update_rewrite_rules();
-            update_option( 'apft_plugin_activated', true );
-            flush_rewrite_rules();
+            if ( self::$instance instanceof AP_Loader ) {
+                self::$instance->loader->update_rewrite_rules();
+                update_option( 'apft_plugin_activated', true );
+                flush_rewrite_rules();
+            }
         }
 
         /**

@@ -52,6 +52,12 @@ https://github.com/yousan/add-page-from-template/issues
 
 == Changelog ==
 
+= Version 0.4.3.1 =
+* Fixed: Set title correctly.
+
+= Version 0.4.3 =
+* Upgraded: Show title from template file.
+
 = Version 0.4.2 =
 * Fixed: Removed a warning.
 
