@@ -224,7 +224,7 @@ class AP_Option
         <table class="widefat" id="apft-templates">
             <thead>
             <tr class="head" style="cursor: move;">
-                <th scope="col"><?php _e('Title', 'apft'); ?></th>
+                <th scope="col" title="<?php _e('Put \'Title:\' comment header at template file to set title.', 'apft'); ?>"><?php _e('Title', 'apft'); ?></th>
                 <th scope="col"><?php _e('Template Name', 'apft'); ?></th>
                 <th scope="col"><?php _e('Status', 'apft'); ?></th>
                 <th scope="col"><?php _e('Actions', 'apft'); ?></th>
