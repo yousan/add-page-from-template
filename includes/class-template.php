@@ -60,9 +60,14 @@ class AP_Template {
     }
 
     /**
-     * Retrieve title from header comment.
+     * Retrieve title from template file.
      */
     public function getTitle() {
         var_dump($this);
     }
+
+    public function retrieveTitle($content) {
+        return '';
+    }
+
 }
