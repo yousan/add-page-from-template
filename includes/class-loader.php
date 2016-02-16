@@ -46,7 +46,7 @@ class AP_Loader
         add_filter( 'query_vars', array(self::$instance, 'query_vars') );
         add_action( 'template_redirect', array(self::$instance, 'template_redirect')) ;
         add_action( 'delete_option', array(self::$instance, 'delete_option'), 10, 1 );
-        add_action( 'parse_query', array(self::$instance, 'setGlobalQuery') );
+        add_action( 'parse_query', array(self::$instance, 'setPseudoPage') );
     }
 
     /**
@@ -58,28 +58,35 @@ class AP_Loader
         $wp_query->set('pagename', $pagename);
     }
 
-    public function setGlobalQuery($arg) {
+    public function setPseudoPage( $arg ) {
+        /** @var WP_Query */
+        global $wp_query;
+
+        if ( $wp_query->is_page ) { // void infinite loop
+            return;
+        }
+        $this->setTemplate();
+        if ( !is_null($this->template) ) {
+            $this->setGlobalPost();
+            $this->setGlobalQuery();
+        }
+
+    }
+
+    public function setGlobalQuery() {
         /**
          * @var WP_Query $wp_query
          * @var WP_Post $post
          * */
         global $wp_query, $post;
 
-        if ( $wp_query->is_page ) { // void infinite loop
-            return;
-        }
-
-        $this->setTemplate();
-        $this->setGlobalPost($this->template);
-        $template = $this->template;
-
         $args = array(
             'p' => 0,
             'post_parent' => '',
             'name' => '', // must be null. The post will be seen 'post' when this value is set.
-            'pagename' => sanitize_title($template->title),
+            'pagename' => sanitize_title($this->template->title),
             'author' => 0,
-            'title' => $template->title,
+            'title' => $this->template->title,
         );
         $wp_query->queried_object = $post;
         $wp_query->is_home = false;
@@ -93,7 +100,7 @@ class AP_Loader
      *
      * @see get_default_post_to_edit()
      */
-    private function setGlobalPost(AP_Template $template) {
+    private function setGlobalPost() {
         /** @var WP_Post */
         global $post;
 
@@ -104,8 +111,8 @@ class AP_Loader
         $postObj->post_date = '';
         $postObj->post_date_gmt = '';
         $postObj->post_password = '';
-        $postObj->post_title = $template->title;
-        $postObj->post_name = sanitize_title($template->title);
+        $postObj->post_title = $this->template->title;
+        $postObj->post_name = sanitize_title($this->template->title);
         $postObj->post_type = 'page';
         $postObj->post_status = 'publish';
         $postObj->to_ping = '';
