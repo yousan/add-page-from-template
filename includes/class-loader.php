@@ -12,8 +12,13 @@ class AP_Loader
     /** @var AP_Template[]  */
     private $templates = array();
 
+    /** @var AP_Template */
+    private $template = null;
+
+
     /** @var AP_Loader */
     private static $instance = null;
+
 
 
     public function __construct($templates){
@@ -38,9 +43,10 @@ class AP_Loader
         $this->register_update_rewrite_rules();
         // to prevent multiple template searcher runs, make this class singleton.
         //add_action('init',  array(self::$instance, 'init'));
-        add_filter('query_vars', array(self::$instance, 'query_vars'));
-        add_action('template_redirect', array(self::$instance, 'template_redirect'));
-        add_action('delete_option', array(self::$instance, 'delete_option'), 10, 1 );
+        add_filter( 'query_vars', array(self::$instance, 'query_vars') );
+        add_action( 'template_redirect', array(self::$instance, 'template_redirect')) ;
+        add_action( 'delete_option', array(self::$instance, 'delete_option'), 10, 1 );
+        add_action( 'parse_query', array(self::$instance, 'setGlobalQuery') );
     }
 
     /**
@@ -52,10 +58,32 @@ class AP_Loader
         $wp_query->set('pagename', $pagename);
     }
 
-    private function setGlobalQuery() {
-        /** @var WP_Query */
-        global $wp_query;
+    public function setGlobalQuery($arg) {
+        /**
+         * @var WP_Query $wp_query
+         * @var WP_Post $post
+         * */
+        global $wp_query, $post;
+
+        if ( $wp_query->is_page ) { // void infinite loop
+            return;
+        }
+
+        $this->setTemplate();
+        $this->setGlobalPost($this->template);
+        $template = $this->template;
+
+        $args = array(
+            'p' => 0,
+            'post_parent' => '',
+            'name' => '', // must be null. The post will be seen 'post' when this value is set.
+            'pagename' => sanitize_title($template->title),
+            'author' => 0,
+            'title' => $template->title,
+        );
+        $wp_query->queried_object = $post;
         $wp_query->is_home = false;
+        $wp_query->is_page = true;
         // 他にも必要そうなものがあればココでセットしていく
         // $wp_query->set('is_home', false)は動かない
     }
@@ -140,6 +168,20 @@ class AP_Loader
     }
 
     /**
+     * Find and set Template.
+     * We should found template before parse_query()
+     */
+    private function setTemplate() {
+        global $wp_query;
+
+        foreach($this->templates as $template) {
+            if ( isset( $wp_query->query[ $template->getTemplateSlug() ] ) ) {
+                $this->template = $template;
+            }
+        }
+    }
+
+    /**
      * 実際に表示させているのはココ！
      */
     public function template_redirect() {
@@ -147,10 +189,9 @@ class AP_Loader
         foreach($this->templates as $template) {
             if (isset($wp_query->query[$template->getTemplateSlug()])) {
                 $templatePath = apply_filters("page_template", $template->path);
-                //add_action('pre_get_posts', array(self::$instance, 'pre_get_posts'));
                 $this->setPagename($template->pagename);
                 $this->setGlobalPost($template);
-                $this->setGlobalQuery();
+                add_action( 'parse_query', array(self::$instance, 'setGlobalQuery') );
                 if ($templatePath = apply_filters('template_include', $templatePath)) {
                     include($templatePath);
                 }
