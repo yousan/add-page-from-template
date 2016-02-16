@@ -52,6 +52,9 @@ https://github.com/yousan/add-page-from-template/issues
 
 == Changelog ==
 
+= Version 0.4.4.1 =
+* Fixed: Remove critical bug.
+
 = Version 0.4.4 =
 * Fixed: Set Title when called at wp_title().
 
