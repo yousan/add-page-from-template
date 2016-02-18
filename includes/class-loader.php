@@ -197,7 +197,7 @@ class AP_Loader
             if (isset($wp_query->query[$template->getTemplateSlug()])) {
                 $templatePath = apply_filters("page_template", $template->path);
                 $this->setPagename($template->pagename);
-                $this->setGlobalPost($template);
+                $this->setGlobalPost(); // re-call setGlobalPost because $post is set by WP with $post->ID
                 add_action( 'parse_query', array(self::$instance, 'setGlobalQuery') );
                 if ($templatePath = apply_filters('template_include', $templatePath)) {
                     include($templatePath);
