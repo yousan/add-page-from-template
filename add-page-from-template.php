@@ -42,7 +42,6 @@ if ( ! class_exists( 'AddPageFromTemplate' ) ) {
         {
             //auto loader
             spl_autoload_register(array($this, 'autoloader'));
-            exit;
             $templates = AP_TemplateSearcher::getTemplates();
             $this->loader = AP_Loader::getInstance($templates);
 
@@ -118,6 +117,7 @@ if ( ! class_exists( 'AddPageFromTemplate' ) ) {
             if (0 !== (strpos($classname, 'AP_'))) {
                 return;
             }
+            var_dump($classname);
             // to lower, remove AP_ prefix. ex) AP_Opiton => option
             $classname = strtolower(str_replace('AP_', '', $classname));
             $dirpath = dirname(__FILE__) . '/includes/';
