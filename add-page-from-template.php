@@ -42,6 +42,7 @@ if ( ! class_exists( 'AddPageFromTemplate' ) ) {
         {
             //auto loader
             spl_autoload_register(array($this, 'autoloader'));
+            exit;
             $templates = AP_TemplateSearcher::getTemplates();
             $this->loader = AP_Loader::getInstance($templates);
 
