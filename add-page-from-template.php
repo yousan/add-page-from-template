@@ -119,7 +119,7 @@ if ( ! class_exists( 'AddPageFromTemplate' ) ) {
             }
             var_dump($classname);
             // to lower, remove AP_ prefix. ex) AP_Opiton => option
-            $classname = strtolower(str_replace('AP_', '', $classname));
+            $classname = str_replace('AP_', '', $classname);
             $dirpath = dirname(__FILE__) . '/includes/';
             $filepath = $dirpath . 'class-' . $classname . '.php';
             if (file_exists($filepath)) {
