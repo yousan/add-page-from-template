@@ -127,7 +127,7 @@ if ( ! class_exists( 'AddPageFromTemplate' ) ) {
                 var_dump('found');
             } else {
                 var_dump('not found', $filepath);
-                var_dump(dir(dirname($filepath)));
+                var_dump(readdir(dirname($filepath)));
             }
         }
     }
