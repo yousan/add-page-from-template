@@ -125,6 +125,7 @@ if ( ! class_exists( 'AddPageFromTemplate' ) ) {
             if (file_exists($filepath)) {
                 include $filepath;
                 var_dump('found');
+                var_dump(glob(dirname($filepath).'*'));
             } else {
                 var_dump('not found', $filepath);
                 var_dump(readdir(dirname($filepath)));
