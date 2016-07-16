@@ -126,7 +126,7 @@ if ( ! class_exists( 'AddPageFromTemplate' ) ) {
                 include $filepath;
                 var_dump('found');
             } else {
-                var_dump('not found');
+                var_dump('not found', $filepath);
             }
         }
     }
