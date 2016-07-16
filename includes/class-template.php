@@ -101,7 +101,8 @@ class AP_Template {
         // incomplete
 	    var_dump(get_declared_classes());
 	    echo 'hoge';
-        return AP_TemplateStatus::ENABLED;
+	    exit;
+        //return AP_TemplateStatus::ENABLED;
     }
 
     /**
