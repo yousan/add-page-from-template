@@ -117,18 +117,13 @@ if ( ! class_exists( 'AddPageFromTemplate' ) ) {
             if (0 !== (strpos($classname, 'AP_'))) {
                 return;
             }
-            var_dump($classname);
             // to lower, remove AP_ prefix. ex) AP_Opiton => option
             $classname = strtolower(str_replace('AP_', '', $classname));
             $dirpath = dirname(__FILE__) . '/includes/';
             $filepath = $dirpath . 'class-' . $classname . '.php';
             if (file_exists($filepath)) {
                 include $filepath;
-                var_dump('found');
-                //var_dump(glob(dirname($filepath).'/*'));
             } else {
-                var_dump('not found', $filepath);
-                var_dump(glob(dirname($filepath).'/*'));
             }
         }
     }

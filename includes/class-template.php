@@ -97,17 +97,8 @@ class AP_Template {
 
     private function getStatus() {
         /** @var WP_Rewrite */
-        //$wp_rewrite;
-        // incomplete
-	    foreach ( get_declared_classes() as $classname ) {
-		    if ( false !== strpos( $classname, 'AP_' ) ) {
-			    echo $classname.PHP_EOL;
-		    }
-	    }
-	    echo 'hoge';
-	    echo AP_TemplateStatus::ENABLED;
-	    exit;
-        //return AP_TemplateStatus::ENABLED;
+	    //$wp_rewrite;
+	    return AP_TemplateStatus::ENABLED;
     }
 
     /**
