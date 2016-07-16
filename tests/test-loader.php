@@ -39,7 +39,6 @@ class AP_Loader_Test extends WP_UnitTestCase {
 
 	private function cpdir_recursively($from, $dest) {
 		if (!is_dir($dest)) {
-			var_dump('not exist');
 			try {
 				mkdir($dest, 0755);
 			} catch (Exception $e) { // @link http://php.net/manual/ja/function.mkdir.php
