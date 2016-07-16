@@ -27,8 +27,58 @@ class AP_Loader_Test extends WP_UnitTestCase {
 	public function testRegister_update_rewrite_rules() {
 		global $wp_query;
 		$loader = new AP_Loader(AP_TemplateSearcher::getTemplates());
-		//$loader->
+
 		$this->go_to( '/' );
 		$this->assertQueryTrue('is_home');
+
+		$theme_pages_dir = get_stylesheet_directory().'/pages/';
+		$test_pages_dir = __DIR__ . '/pages/';
+		$this->cpdir_recursively($test_pages_dir, $theme_pages_dir);
+		$this->rmdir_recursively($theme_pages_dir);
 	}
+
+	private function cpdir_recursively($from, $dest) {
+		if (!is_dir($dest)) {
+			var_dump('not exist');
+			try {
+				mkdir($dest, 0755);
+			} catch (Exception $e) { // @link http://php.net/manual/ja/function.mkdir.php
+				// no permission to create directory
+				throw $e;
+			}
+		} else { // directory already exists
+		}
+		/** @var RecursiveIteratorIterator $iterator */
+		$iterator = new \RecursiveIteratorIterator(
+			new \RecursiveDirectoryIterator( $from, \RecursiveDirectoryIterator::SKIP_DOTS ),
+			\RecursiveIteratorIterator::SELF_FIRST );
+		foreach ( $iterator as $item ) {
+			/** @var RecursiveDirectoryIterator $item */
+			if ($item->isDir()) {
+				if (!is_dir($dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName())) {
+					mkdir( $dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName() );
+				}
+			} else {
+				copy($item, $dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+			}
+		}
+	}
+
+	private function rmdir_recursively($dirpath) {
+		// @link http://stackoverflow.com/questions/5707806/recursive-copy-of-directory
+		// @link http://stackoverflow.com/questions/3338123/how-do-i-recursively-delete-a-directory-and-its-entire-contents-files-sub-dir
+		$iterator = new \RecursiveIteratorIterator(
+			new \RecursiveDirectoryIterator( $dirpath, \RecursiveDirectoryIterator::SKIP_DOTS ),
+			\RecursiveIteratorIterator::CHILD_FIRST );
+		foreach ( $iterator as $item) {
+			/** @var $item RecursiveDirectoryIterator */
+			if ($item->isDir() ) { // directory
+				rmdir($item);
+			} else { // file
+				unlink($item);
+			}
+		}
+		rmdir($dirpath);
+	}
+
 }
