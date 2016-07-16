@@ -69,7 +69,7 @@ if ( ! class_exists( 'AddPageFromTemplate' ) ) {
          */
         public static function deactivation_callback() {
             /*
-             * プラグインが無効化された！
+             * プラグインが無効化された
              * この時点でis_plugin_active()の戻り値はtrue
              */
             delete_option( 'apft_plugin_activated' );

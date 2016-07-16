@@ -99,7 +99,6 @@ class AP_Template {
         /** @var WP_Rewrite */
         //$wp_rewrite;
         // incomplete
-	    echo 'hoge';
         return AP_TemplateStatus::ENABLED;
     }
 
