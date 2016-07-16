@@ -124,6 +124,9 @@ if ( ! class_exists( 'AddPageFromTemplate' ) ) {
             $filepath = $dirpath . 'class-' . $classname . '.php';
             if (file_exists($filepath)) {
                 include $filepath;
+                var_dump('found');
+            } else {
+                var_dump('not found');
             }
         }
     }
