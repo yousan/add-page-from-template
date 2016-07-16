@@ -99,6 +99,7 @@ class AP_Template {
         /** @var WP_Rewrite */
         //$wp_rewrite;
         // incomplete
+	    var_dump(get_declared_classes());
         return AP_TemplateStatus::ENABLED;
     }
 
