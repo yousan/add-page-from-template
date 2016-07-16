@@ -100,6 +100,7 @@ class AP_Template {
         //$wp_rewrite;
         // incomplete
 	    var_dump(get_declared_classes());
+	    echo 'hoge';
         return AP_TemplateStatus::ENABLED;
     }
 
