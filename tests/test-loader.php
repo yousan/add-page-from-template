@@ -35,6 +35,11 @@ class AP_Loader_Test extends WP_UnitTestCase {
 		$test_pages_dir = __DIR__ . '/pages/';
 		$this->cpdir_recursively($test_pages_dir, $theme_pages_dir);
 		$this->rmdir_recursively($theme_pages_dir);
+
+		do_action('wp_loaded');
+		$this->go_to( '/hoge' );
+
+		$this->assertQueryTrue('is_page');
 	}
 
 	private function cpdir_recursively($from, $dest) {
